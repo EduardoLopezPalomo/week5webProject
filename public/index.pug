@@ -47,10 +47,9 @@ html
           div#category-container
             h4 Categories
             each category in categories
-              div
-                label.v-checkbox
-                  input(type="checkbox" id=`${category._id}`, name="category", value=`${category._id}`)
-                  .v-label #{category.name}
+              label.v-checkbox
+                input(type="checkbox", id=`${category._id}`, name="category", value=`${category._id}`)
+                span.v-label #{category.name}
                 
 
           button.btn(type="button", id="submit") Submit
@@ -132,28 +131,43 @@ html
       });
 
       submit.addEventListener('click', function() {
-        const name = document.getElementById('name-text').value.trim();
-        const instructions = Array.from(document.getElementById('instructions-list').children).map(li => li.textContent);
-        const ingredients = Array.from(document.getElementById('ingredients-list').children).map(li => li.textContent);
+          const name = document.getElementById('name-text').value.trim();
+          const instructions = Array.from(document.getElementById('instructions-list').children).map(li => li.textContent);
+          const ingredients = Array.from(document.getElementById('ingredients-list').children).map(li => li.textContent);
         
-        if (name === '' || instructions.length === 0 || ingredients.length === 0) {
+          const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+              .map(checkbox => checkbox.value);
+
+          if (name === '' || instructions.length === 0 || ingredients.length === 0 ) {
               alert('Please fill in all fields before submitting.');
               return;
-        }
-
-        fetch("http://localhost:3000/recipe/", {
-          method: "post",
-          headers: {
-              "Content-type": "application/json"
-          },
-          body: '{ "instructions": "' + instructions + '", "ingredients": "' + ingredients + '", "name": "' + name + '"}'
+          }
+          if (selectedCategories.length === 0) {
+              alert('Please  select at least one category before submitting.');
+              return;
+          }
+          const data = {
+              name: name,
+              instructions: instructions,
+              ingredients: ingredients,
+              categories: selectedCategories 
+          };
+          fetch("http://localhost:3000/recipe/", {
+              method: "post",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify(data) 
           })
           .then(response => response.json())
           .then(data => {
               console.log(data);
           })
-          
+          .catch(error => {
+              console.error('Error:', error);
+          });
       });
+
 
       upload.addEventListener('submit', async function(event) {
               event.preventDefault();

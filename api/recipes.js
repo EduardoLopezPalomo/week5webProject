@@ -98,7 +98,7 @@ router.get("/", async (req, res, next) => {
         instructions,
         ingredients,
         name,
-        categories
+        categories: categories || []
       }).save()
   
       res.status(201).json({ message: 'Recipe created successfully', recipe: newRecipe });
