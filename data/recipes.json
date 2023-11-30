@@ -1,0 +1,79 @@
+[{
+    "instructions": [
+      "preheat oven 225C",
+      "slice mozzarellas",
+      "put tomato sauce on pizza base",
+      "put mozzarella slices on pizza",
+      "bake for 15 min",
+      "Meanwhile, make the sauce"
+    ],
+    "ingredients": [
+      "1 frozen pizza base",
+      "1 tomato sauce",
+      "2 mozzarellas"
+    ],
+    "name": "Pizza"
+},
+{ 
+    "instructions": [
+        "Put it in oven for 30 min",
+        "Meanwhile, make the sauce",
+        "Drain the pasta and return it to the pot.",
+        "Add your favorite sauce and toss until coated."
+    ],
+    "ingredients": [
+       "Pasta", 
+        "Pasta sauce",
+        "Salt (for boiling water)",
+        "Optional: Parmesan cheese, fresh herbs for garnish"
+    ],
+    "name": "Pasta"
+},
+{ 
+    "instructions": [
+        "Put it in oven for 30 min",
+        "Meanwhile, make the sauce",
+        "Prepare the gravy by sautéing onions, adding spices, and pureed tomatoes.",
+        "Combine cooked chicken with the gravy and simmer with cream",
+        "Garnish with fresh coriander leaves and serve hot"
+    ],
+    "ingredients": [
+       "Boneless chicken", 
+        "Tikka_Masala",
+        "Ginger-garlic paste",
+        "Spices (turmeric powder, red chili powder, garam masala)"
+    ],
+    "name": "Tikka_Masala"
+},
+{ 
+    "instructions": [
+        "Put it in oven for 30 min",
+        "Meanwhile, make the sauce",
+        "Prepare the gravy by sautéing onions, adding spices, and pureed tomatoes.",
+        "Combine cooked chicken with the gravy and simmer with cream.",
+        "Garnish with fresh coriander leaves and serve hot."
+    ],
+    "ingredients": [
+        "Boneless chicken", 
+        "Tikka_Masala",
+        "Ginger-garlic paste",
+        "Spices (turmeric powder, red chili powder, garam masala)"
+    ],
+    "name": "Casserole"
+},
+{ 
+    "instructions": [
+        "Put it in oven for 30 min",
+        "Meanwhile, make the sauce",
+        "Drain the pasta and return it to the pot.",
+        "Add your favorite sauce and toss until coated."
+    ],
+    "ingredients": [
+       "Lasagna",
+       "Plain yogurt", 
+        "Pasta sauce",
+        "Salt (for boiling water)",
+        "Optional: Parmesan cheese, fresh herbs for garnish"
+    ],
+    "name": "Lasagna"
+}]
