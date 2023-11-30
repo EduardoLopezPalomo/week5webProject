@@ -27,6 +27,9 @@ let recipe = {
   ],
   "name": "Pizza"
 }
+let categories = [{"name": "hola"}];
+
+
 
 
 fs.readFile("./data/recipes.json", "utf-8", (err, data)=>{
@@ -39,7 +42,9 @@ fs.readFile("./data/recipes.json", "utf-8", (err, data)=>{
 })
 
 router.get("/", async (req, res, next) => {
-    res.render("index",{recipe});
+  const categories2 = await Category.find();
+      categories = categories2;
+    res.render("index",{recipe,categories});
   });
   
 
@@ -60,23 +65,28 @@ router.get("/", async (req, res, next) => {
   
   router.get('/categories', async (req, res) => {
     try {
-      const categories = await Category.find();
-      res.json(categories);
+      const categories2 = await Category.find();
+      categories = categories2;
+      res.json(categories2);
     } catch (error) {
       res.status(500).json({ message: 'Failed to fetch categories', error: error.message });
     }
   });
 
-  router.put('/recipes/:name/categories', async (req, res) => {
-    const { name } = req.params;
-    const { categoryIds } = req.body; 
-  
+  router.post('/categories/', (req, res) => {
     try {
-      await Recipe.findByIdAndUpdate(name, { categories: categoryIds });
-      res.status(200).json({ message: 'Recipe categories updated successfully' });
+      const { name } = req.body;
+  
+      const newCategory = new Category({
+        name
+      }).save()
+  
+      res.status(201).json({ message: 'category created successfully', categories: newCategory });
     } catch (error) {
-      res.status(500).json({ message: 'Failed to update recipe categories', error: error.message });
+      res.status(500).json({ message: 'Failed to create category', error: error.message });
     }
+  
+    
   });
   
 
