@@ -47,10 +47,12 @@ html
           div#category-container
             h4 Categories
             each category in categories
-              div(class="category-item")
-                input(type="checkbox", id=`${category._id}`, name="category", value="${category.name}")
-                label(for=`${category._id}`) #{category.name}
+              div
+                label.v-checkbox
+                  input(type="checkbox" id=`${category._id}`, name="category", value=`${category._id}`)
+                  .v-label #{category.name}
                 
+
           button.btn(type="button", id="submit") Submit
 
       div.row

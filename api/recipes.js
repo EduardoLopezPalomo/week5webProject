@@ -92,12 +92,13 @@ router.get("/", async (req, res, next) => {
 
   router.post('/recipe/', (req, res, next) => {
     try {
-      const { name, instructions, ingredients } = req.body;
+      const { name, instructions, ingredients, categories } = req.body;
   
       const newRecipe = new Recipe({
         instructions,
         ingredients,
-        name
+        name,
+        categories
       }).save()
   
       res.status(201).json({ message: 'Recipe created successfully', recipe: newRecipe });
