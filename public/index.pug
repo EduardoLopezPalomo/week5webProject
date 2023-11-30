@@ -43,10 +43,6 @@ html
           textarea(id="instructions-text", placeholder="Enter instructions")
           button.btn(type="button", id="add-instruction") Add instruction
           ul(id="instructions-list")
-           .container
-              div#categoryContainer
-              each category in categories
-              div(class=category.isActive ? 'category selected' : 'category', onclick=`toggleCategory('${category._id}')`) #{category.name}
           button.btn(type="button", id="submit") Submit
 
       div.row
@@ -193,7 +189,7 @@ html
             try {
               const response = await fetch(`/recipe/${searchValue}`);
               const data = await response.json();
-
+              console.log(response);
               if (response.ok) {
                 if (data.recipes && data.recipes.length > 0) {
                   const recipe = data.recipes[0]; 

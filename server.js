@@ -22,31 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 
-app.get('/', (req, res) => {
-  try {
 
-    const recipe = {
-      "instructions": [
-        "preheat oven 225C",
-        "slice mozzarellas",
-        "put tomato sauce on pizza base",
-        "put mozzarella slices on pizza",
-        "bake for 15 min",
-        "Meanwhile, make the sauce"
-      ],
-      "ingredients": [
-        "1 frozen pizza base",
-        "1 tomato sauce",
-        "2 mozzarellas"
-      ],
-      "name": "Pizza",
-    };
-
-    res.render('index', {recipe});
-  } catch (error) {
-    res.status(500).send('Error fetching recipe');
-  }
-});
 
 app.use("/", recipeRoutes);
 

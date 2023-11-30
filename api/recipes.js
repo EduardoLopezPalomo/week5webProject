@@ -11,7 +11,23 @@ const upload = multer({
   });
 
 let recipes = [];
-let recipe;
+let recipe = {
+  "instructions": [
+    "preheat oven 225C",
+    "slice mozzarellas",
+    "put tomato sauce on pizza base",
+    "put mozzarella slices on pizza",
+    "bake for 15 min",
+    "Meanwhile, make the sauce"
+  ],
+  "ingredients": [
+    "1 frozen pizza base",
+    "1 tomato sauce",
+    "2 mozzarellas"
+  ],
+  "name": "Pizza"
+}
+
 
 fs.readFile("./data/recipes.json", "utf-8", (err, data)=>{
     if(err){
@@ -23,24 +39,16 @@ fs.readFile("./data/recipes.json", "utf-8", (err, data)=>{
 })
 
 router.get("/", async (req, res, next) => {
-    Recipe.find({}, (err, recipes) => {
-        
-        if(err) return next(err);
-        if(recipes) {
-            return res.json(recipes);
-        } else {
-            return res.status(404).send("Not found");
-        }
-    })
+    res.render("index",{recipe});
   });
   
+
   router.get('/recipe/:food', async (req, res) => {
     try {
       const food = req.params.food;
       const recipes = await Recipe.find({ name: { $regex: food, $options: 'i' } });
-      console.log(recipes);
-  
       if (recipes.length > 0) {
+        recipe = recipes[0];
         return res.json(recipes);
       } else {
         return res.status(404).json({ message: 'No recipes found for this food' });
