@@ -60,7 +60,6 @@ router.get("/", async (req, res, next) => {
 
         for (const imageId of recipe2.images) {
           const image = await Image.findById(imageId);
-          console.log(image);
           if (image) {
             imageDetails.push(image);
           }
@@ -105,7 +104,9 @@ router.get("/", async (req, res, next) => {
 
   router.post('/recipe/', (req, res, next) => {
     try {
-      const { name, instructions, ingredients, categories, images } = req.body;
+      const { name, instructions, ingredients, categories} = req.body;
+
+      const images= req.body.images;
 
       const recipeCategories = Array.isArray(categories) ? categories : [];
       const recipeImages = Array.isArray(images) ? images : [];
