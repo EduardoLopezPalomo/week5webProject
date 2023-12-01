@@ -93,14 +93,18 @@ router.get("/", async (req, res, next) => {
   router.post('/recipe/', (req, res, next) => {
     try {
       const { name, instructions, ingredients, categories, images } = req.body;
-  
+
+      const recipeCategories = Array.isArray(categories) ? categories : [];
+      const recipeImages = Array.isArray(images) ? images : [];
+
       const newRecipe = new Recipe({
         instructions,
         ingredients,
         name,
         categories: categories || [],
-        images: [images] 
+        images: images  
       }).save()
+
   
       res.status(201).json({ message: 'Recipe created successfully', recipe: newRecipe });
     } catch (error) {

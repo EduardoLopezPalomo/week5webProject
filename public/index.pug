@@ -164,7 +164,7 @@ html
 
           // Upload the image and get the image ID
           const imageId = await uploadImageAndGetId(imageFile);
-          // Create recipe data with associated image ID
+  
           const data = {
             name: name,
             instructions: instructions,
@@ -172,6 +172,7 @@ html
             categories: selectedCategories,
             images: [imageId] // Add the obtained image ID to the array of image IDs
           };
+          
 
           // Send recipe data to server to save
           const response = await fetch('http://localhost:3000/recipe/', {
