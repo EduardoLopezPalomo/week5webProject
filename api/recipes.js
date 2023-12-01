@@ -44,8 +44,8 @@ fs.readFile("./data/recipes.json", "utf-8", (err, data)=>{
 
 router.get("/", async (req, res, next) => {
   const categories2 = await Category.find();
-      categories = categories2;
-    res.render("index",{recipe,categories, images});
+  categories = categories2;
+  res.render("index",{recipe,categories, images });
   });
 
   router.get('/recipe/:food', async (req, res) => {
@@ -57,8 +57,9 @@ router.get("/", async (req, res, next) => {
         const recipe2 = recipes[0];
         const imageDetails = [];
 
-        for (const imageId of recipe.images) {
+        for (const imageId of recipe2.images) {
           const image = await Image.findById(imageId);
+          console.log(image);
           if (image) {
             imageDetails.push(image);
           }
