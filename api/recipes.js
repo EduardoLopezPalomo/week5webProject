@@ -49,10 +49,10 @@ router.get("/", async (req, res, next) => {
   });
 
   router.get('/recipe/:food', async (req, res) => {
+    const uuu = req.body.images;
     try {
       const food = req.params.food;
       const recipes = await Recipe.find({ name: { $regex: food, $options: 'i' } });
-      const aux = req.body.images;
   
       if (recipes.length > 0) {
         const recipe2 = recipes[0];
