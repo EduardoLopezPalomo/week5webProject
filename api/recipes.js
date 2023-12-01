@@ -25,10 +25,11 @@ let recipe = {
     "1 tomato sauce",
     "2 mozzarellas"
   ],
-  "name": "Pizza"
+  "name": "Pizza",
+  "images":[]
 }
 let categories = [{"name": "hola"}];
-
+let images = [];
 
 
 
@@ -44,16 +45,26 @@ fs.readFile("./data/recipes.json", "utf-8", (err, data)=>{
 router.get("/", async (req, res, next) => {
   const categories2 = await Category.find();
       categories = categories2;
-    res.render("index",{recipe,categories});
+    res.render("index",{recipe,categories, images});
   });
-  
 
   router.get('/recipe/:food', async (req, res) => {
     try {
       const food = req.params.food;
       const recipes = await Recipe.find({ name: { $regex: food, $options: 'i' } });
+  
       if (recipes.length > 0) {
-        recipe = recipes[0];
+        const recipe2 = recipes[0];
+        const imageDetails = [];
+
+        for (const imageId of recipe.images) {
+          const image = await Image.findById(imageId);
+          if (image) {
+            imageDetails.push(image);
+          }
+        }
+        recipe = recipe2;
+        images = imageDetails;
         return res.json(recipes);
       } else {
         return res.status(404).json({ message: 'No recipes found for this food' });
@@ -128,6 +139,21 @@ router.get("/", async (req, res, next) => {
       res.status(500).json({ message: 'Failed to upload image', error: error.message });
     }
   });
+
+  router.get('/image/:imageId', async (req, res) => {
+    try {
+      const imageDetails = await Image.findById(req.params.imageId);
+      if (!imageDetails) {
+        return res.status(404).json({ message: 'Image not found' });
+      }
+      res.set('Content-Type', imageDetails.mimetype);
+      res.set('Content-Disposition', 'inline');
+      res.send(imageDetails.buffer);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch image', error: error.message });
+    }
+  });
+  
 
   router.get('/new_recipe', (req, res) => {
     res.send(recipes[nameaux]);
