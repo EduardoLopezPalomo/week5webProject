@@ -9,6 +9,10 @@ let recipeSchema = new Schema({
     categories: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category'
+    }],
+    images: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Image'
     }]
   });
 

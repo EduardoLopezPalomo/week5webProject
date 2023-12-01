@@ -5,10 +5,10 @@ const router = express.Router();
 const multer = require('multer');
 const fs = require("fs");
 const Category = require('../models/category');
+const Image = require("../models/images");
 
-const upload = multer({
-    dest: 'uploads/',
-  });
+const storage = multer.memoryStorage(); 
+const upload = multer({ storage: storage });
 
 let recipes = [];
 let recipe = {
@@ -92,13 +92,14 @@ router.get("/", async (req, res, next) => {
 
   router.post('/recipe/', (req, res, next) => {
     try {
-      const { name, instructions, ingredients, categories } = req.body;
+      const { name, instructions, ingredients, categories, images } = req.body;
   
       const newRecipe = new Recipe({
         instructions,
         ingredients,
         name,
-        categories: categories || []
+        categories: categories || [],
+        images: [images] 
       }).save()
   
       res.status(201).json({ message: 'Recipe created successfully', recipe: newRecipe });
@@ -107,17 +108,27 @@ router.get("/", async (req, res, next) => {
     }
   });
 
-  router.post('/images', upload.array('images'), (req, res) => {
-    
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).send('No images were uploaded.');
-    }
+  router.post('/image/', upload.single('image'), async (req, res) => {
+    try {
+      const newImage = new Image({
+        buffer: req.file.buffer,
+        mimetype: req.file.mimetype,
+        name: req.file.originalname,
+        encoding: req.file.encoding
+      });
   
-    res.send("Hi");
+      const savedImage = await newImage.save();
+  
+      res.status(201).json(savedImage);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to upload image', error: error.message });
+    }
   });
 
   router.get('/new_recipe', (req, res) => {
     res.send(recipes[nameaux]);
   });
+
+  
 
 module.exports = router;

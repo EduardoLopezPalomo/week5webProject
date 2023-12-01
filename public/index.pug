@@ -50,21 +50,19 @@ html
               label.v-checkbox
                 input(type="checkbox", id=`${category._id}`, name="category", value=`${category._id}`)
                 span.v-label #{category.name}
-                
+          div.row
+            div.col
+              h1 Image Uploader
+              form(id="upload-form", enctype="multipart/form-data")
+                div.file-field.input-field
+                  div.btn
+                    span File
+                    input#image-input(type="file", name="image", accept="image/*", multiple)      
+                  div.file-path-wrapper
+                    input.file-path.validate(type="text", placeholder="Upload one or more files")
+                //button.btn(type="submit") Upload
 
           button.btn(type="button", id="submit") Submit
-
-      div.row
-        div.col
-          h1 Image Uploader
-          form(id="upload-form", enctype="multipart/form-data")
-            div.file-field.input-field
-              div.btn
-                span File
-                input#image-input(type="file", name="images", accept="image/*", multiple)
-              div.file-path-wrapper
-                input.file-path.validate(type="text", placeholder="Upload one or more files")
-            button.btn(type="submit") Upload
   script.
       const addIngrident = document.getElementById('add-ingredient');
       const addInstruction = document.getElementById('add-instruction');
@@ -130,39 +128,65 @@ html
           }
       });
 
-      submit.addEventListener('click', function() {
+      async function uploadImageAndGetId(file) {
+        try {
+          const formData = new FormData();
+          formData.append('image', file);
+
+          const response = await fetch('http://localhost:3000/image/', {
+            method: 'POST',
+            body: formData,
+          });
+
+          const data = await response.json();
+          return data._id; // Assuming the response contains the image ID
+        } catch (error) {
+          console.error('Error uploading image:', error);
+          throw error;
+        }
+      }
+
+      // Event listener for form submission
+      submit.addEventListener('click', async function() {
+        try {
           const name = document.getElementById('name-text').value.trim();
           const instructions = Array.from(document.getElementById('instructions-list').children).map(li => li.textContent);
           const ingredients = Array.from(document.getElementById('ingredients-list').children).map(li => li.textContent);
-        
-          const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
-              .map(checkbox => checkbox.value);
+          const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(checkbox => checkbox.value);
 
-          if (name === '' || instructions.length === 0 || ingredients.length === 0 ) {
-              alert('Please fill in all fields before submitting.');
-              return;
+          if (name === '' || instructions.length === 0 || ingredients.length === 0) {
+            alert('Please fill in all fields before submitting.');
+            return;
           }
-          
+
+          const fileInput = document.getElementById('image-input');
+          const imageFile = fileInput.files[0]; // Assuming a single file is selected
+
+          // Upload the image and get the image ID
+          const imageId = await uploadImageAndGetId(imageFile);
+          // Create recipe data with associated image ID
           const data = {
-              name: name,
-              instructions: instructions,
-              ingredients: ingredients,
-              categories: selectedCategories 
+            name: name,
+            instructions: instructions,
+            ingredients: ingredients,
+            categories: selectedCategories,
+            images: [imageId] // Add the obtained image ID to the array of image IDs
           };
-          fetch("http://localhost:3000/recipe/", {
-              method: "post",
-              headers: {
-                  "Content-Type": "application/json"
-              },
-              body: JSON.stringify(data) 
-          })
-          .then(response => response.json())
-          .then(data => {
-              console.log(data);
-          })
-          .catch(error => {
-              console.error('Error:', error);
+
+          // Send recipe data to server to save
+          const response = await fetch('http://localhost:3000/recipe/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
           });
+
+          const responseData = await response.json();
+          console.log(responseData); // Handle response from server as needed
+        } catch (error) {
+          console.error('Error:', error);
+        }
       });
 
 
@@ -178,11 +202,11 @@ html
               const formData = new FormData();
 
               Array.from(imageInput.files).forEach(file => {
-                  formData.append('images', file);
+                  formData.append('image', file);
               });
 
               try {
-                  const response1 = await fetch('/images', {
+                  const response1 = await fetch('/image/', {
                   method: 'POST',
                   body: formData
                   });
